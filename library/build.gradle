@@ -5,17 +5,17 @@ plugins {
 ext {
     PUBLISH_GROUP_ID = 'com.tom-roush'
     PUBLISH_ARTIFACT_ID = 'pdfbox-android'
-    PUBLISH_VERSION = VERSION_NAME
+    PUBLISH_VERSION = "2.0.27.1-SNAPSHOT"
 }
 
 android {
-    compileSdkVersion Integer.parseInt(project.ANDROID_BUILD_SDK_VERSION)
+    compileSdkVersion 33
     compileOptions.encoding = 'UTF-8'
 
     defaultConfig {
         testInstrumentationRunnerArguments notAnnotation: 'androidx.test.filters.FlakyTest'
-        minSdkVersion Integer.parseInt(project.ANDROID_BUILD_MIN_SDK_VERSION)
-        targetSdkVersion Integer.parseInt(project.ANDROID_BUILD_TARGET_SDK_VERSION)
+        minSdkVersion 14
+        targetSdkVersion 33
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-proguard-rules.txt'
     }
