@@ -38,5 +38,5 @@ dependencies {
     // Optional dependencies
 
     // Read JPX images
-    implementation 'com.gemalto.jp2:jp2-android:1.0.3'
+//    implementation 'com.gemalto.jp2:jp2-android:1.0.3'
 }

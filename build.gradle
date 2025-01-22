@@ -5,7 +5,7 @@ buildscript {
     repositories {
         mavenCentral()
         google()
-        jcenter() // jp2-android
+//        jcenter() // jp2-android
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'
