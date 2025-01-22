@@ -17,6 +17,7 @@
 package com.tom_roush.fontbox.afm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,23 +27,21 @@ import java.util.List;
  */
 public class Composite
 {
-    private String name;
-    private List<CompositePart> parts = new ArrayList<CompositePart>();
+    private final String name;
+    private final List<CompositePart> parts = new ArrayList<CompositePart>();
+
+    public Composite(String name)
+    {
+        this.name = name;
+    }
 
     /** Getter for property name.
      * @return Value of property name.
      */
+
     public String getName()
     {
         return name;
-    }
-
-    /** Setter for property name.
-     * @param nameValue New value of property name.
-     */
-    public void setName(String nameValue)
-    {
-        this.name = nameValue;
     }
 
     /**
@@ -60,15 +59,6 @@ public class Composite
      */
     public List<CompositePart> getParts()
     {
-        return parts;
+        return Collections.unmodifiableList(parts);
     }
-
-    /** Setter for property parts.
-     * @param partsList New value of property parts.
-     */
-    public void setParts(List<CompositePart> partsList)
-    {
-        this.parts = partsList;
-    }
-
 }

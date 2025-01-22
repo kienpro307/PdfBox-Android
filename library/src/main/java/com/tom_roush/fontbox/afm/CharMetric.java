@@ -17,6 +17,7 @@
 package com.tom_roush.fontbox.afm;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.tom_roush.fontbox.util.BoundingBox;
@@ -45,7 +46,7 @@ public class CharMetric
 
     private String name;
     private BoundingBox boundingBox;
-    private List<Ligature> ligatures = new ArrayList<Ligature>();
+    private final List<Ligature> ligatures = new ArrayList<Ligature>();
 
     /** Getter for property boundingBox.
      * @return Value of property boundingBox.
@@ -94,15 +95,7 @@ public class CharMetric
      */
     public List<Ligature> getLigatures()
     {
-        return ligatures;
-    }
-
-    /** Setter for property ligatures.
-     * @param lig New value of property ligatures.
-     */
-    public void setLigatures(List<Ligature> lig)
-    {
-        this.ligatures = lig;
+        return Collections.unmodifiableList(ligatures);
     }
 
     /** Getter for property name.

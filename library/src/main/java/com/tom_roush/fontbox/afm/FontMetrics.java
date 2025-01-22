@@ -44,13 +44,13 @@ public class FontMetrics
     private String fontVersion;
     private String notice;
     private String encodingScheme;
-    private int mappingScheme;
-    private int escChar;
+    private int mappingScheme = 0;
+    private int escChar = 0;
     private String characterSet;
-    private int characters;
-    private boolean isBaseFont;
+    private int characters = 0;
+    private boolean isBaseFont = true;
     private float[] vVector;
-    private boolean isFixedV;
+    private Boolean isFixedV = null;
     private float capHeight;
     private float xHeight;
     private float ascender;
@@ -65,19 +65,20 @@ public class FontMetrics
     private float standardHorizontalWidth;
     private float standardVerticalWidth;
 
-    private List<CharMetric> charMetrics = new ArrayList<CharMetric>();
-    private Map<String,CharMetric> charMetricsMap = new HashMap<String,CharMetric>();
-    private List<TrackKern> trackKern = new ArrayList<TrackKern>();
-    private List<Composite> composites = new ArrayList<Composite>();
-    private List<KernPair> kernPairs = new ArrayList<KernPair>();
-    private List<KernPair> kernPairs0 = new ArrayList<KernPair>();
-    private List<KernPair> kernPairs1 = new ArrayList<KernPair>();
+    private final List<CharMetric> charMetrics = new ArrayList<CharMetric>();
+    private final Map<String, CharMetric> charMetricsMap = new HashMap<String, CharMetric>();
+    private final List<TrackKern> trackKern = new ArrayList<TrackKern>();
+    private final List<Composite> composites = new ArrayList<Composite>();
+    private final List<KernPair> kernPairs = new ArrayList<KernPair>();
+    private final List<KernPair> kernPairs0 = new ArrayList<KernPair>();
+    private final List<KernPair> kernPairs1 = new ArrayList<KernPair>();
 
     /**
      * Constructor.
      */
     public FontMetrics()
     {
+        // Default constructor
     }
 
     /**
@@ -111,7 +112,7 @@ public class FontMetrics
         if( metric != null )
         {
             result = metric.getWy();
-            if( result == 0 )
+            if( Float.compare(result, 0) == 0 )
             {
                 result = metric.getBoundingBox().getHeight();
             }
@@ -436,7 +437,7 @@ public class FontMetrics
      *
      * @return Value of property isBaseFont.
      */
-    public boolean isBaseFont()
+    public boolean getIsBaseFont()
     {
         return isBaseFont;
     }
@@ -476,9 +477,10 @@ public class FontMetrics
      *
      * @return Value of property isFixedV.
      */
-    public boolean isFixedV()
+    public boolean getIsFixedV()
     {
-        return isFixedV;
+        // if not set the default value depends on the existence of vVector
+        return isFixedV == null ? vVector != null : isFixedV;
     }
 
     /**
@@ -676,7 +678,7 @@ public class FontMetrics
      *
      * @return Value of property isFixedPitch.
      */
-    public boolean isFixedPitch()
+    public boolean getIsFixedPitch()
     {
         return isFixedPitch;
     }
@@ -699,18 +701,6 @@ public class FontMetrics
         return Collections.unmodifiableList(charMetrics);
     }
 
-    /** Setter for property charMetrics.
-     * @param charMetricsValue New value of property charMetrics.
-     */
-    public void setCharMetrics(List<CharMetric> charMetricsValue)
-    {
-        charMetrics = charMetricsValue;
-        charMetricsMap = new HashMap<String, CharMetric>(charMetrics.size());
-        for (CharMetric metric : charMetricsValue)
-        {
-            charMetricsMap.put( metric.getName(), metric );
-        }
-    }
 
     /**
      * This will add another character metric.
@@ -731,14 +721,6 @@ public class FontMetrics
         return Collections.unmodifiableList(trackKern);
     }
 
-    /** Setter for property trackKern.
-     * @param trackKernValue New value of property trackKern.
-     */
-    public void setTrackKern(List<TrackKern> trackKernValue)
-    {
-        trackKern = trackKernValue;
-    }
-
     /**
      * This will add another track kern.
      *
@@ -755,14 +737,6 @@ public class FontMetrics
     public List<Composite> getComposites()
     {
         return Collections.unmodifiableList(composites);
-    }
-
-    /** Setter for property composites.
-     * @param compositesList New value of property composites.
-     */
-    public void setComposites(List<Composite> compositesList)
-    {
-        composites = compositesList;
     }
 
     /**
@@ -793,14 +767,6 @@ public class FontMetrics
         kernPairs.add( kernPair );
     }
 
-    /** Setter for property kernPairs.
-     * @param kernPairsList New value of property kernPairs.
-     */
-    public void setKernPairs(List<KernPair> kernPairsList)
-    {
-        kernPairs = kernPairsList;
-    }
-
     /** Getter for property kernPairs0.
      * @return Value of property kernPairs0.
      */
@@ -819,14 +785,6 @@ public class FontMetrics
         kernPairs0.add( kernPair );
     }
 
-    /** Setter for property kernPairs0.
-     * @param kernPairs0List New value of property kernPairs0.
-     */
-    public void setKernPairs0(List<KernPair> kernPairs0List)
-    {
-        kernPairs0 = kernPairs0List;
-    }
-
     /** Getter for property kernPairs1.
      * @return Value of property kernPairs1.
      */
@@ -843,14 +801,6 @@ public class FontMetrics
     public void addKernPair1( KernPair kernPair )
     {
         kernPairs1.add( kernPair );
-    }
-
-    /** Setter for property kernPairs1.
-     * @param kernPairs1List New value of property kernPairs1.
-     */
-    public void setKernPairs1(List<KernPair> kernPairs1List)
-    {
-        kernPairs1 = kernPairs1List;
     }
 
     /** Getter for property standardHorizontalWidth.

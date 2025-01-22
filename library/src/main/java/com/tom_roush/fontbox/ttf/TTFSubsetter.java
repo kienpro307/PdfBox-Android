@@ -327,7 +327,7 @@ public final class TTFSubsetter
                     else if (encoding == 1) // ISO 10646=
                     {
                         //not sure is this is correct??
-                        charset = "UTF16-BE";
+                        charset = "UTF-16BE";
                     }
                     else if (encoding == 2) // ISO 8859-1
                     {
@@ -1086,5 +1086,9 @@ public final class TTFSubsetter
     private int log2(int num)
     {
         return (int) Math.floor(Math.log(num) / Math.log(2));
+    }
+
+    public void addGlyphIds(Set<Integer> allGlyphIds) {
+        this.glyphIds.addAll(allGlyphIds);
     }
 }

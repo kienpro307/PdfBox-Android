@@ -30,11 +30,11 @@ import java.io.InputStream;
  */
 class MemoryTTFDataStream extends TTFDataStream
 {
-    private byte[] data = null;
+    private final byte[] data;
     private int currentPosition = 0;
 
     /**
-     * Constructor from a stream. 
+     * Constructor from a stream.
      * @param is The stream to read from. It will be closed by this method.
      * @throws IOException If an error occurs while reading from the stream.
      */
@@ -178,10 +178,7 @@ class MemoryTTFDataStream extends TTFDataStream
      * @throws IOException If there is an error reading from the stream.
      */
     @Override
-    public int read(byte[] b,
-        int off,
-        int len)
-        throws IOException
+    public int read(byte[] b, int off, int len) throws IOException
     {
         if (currentPosition < data.length)
         {

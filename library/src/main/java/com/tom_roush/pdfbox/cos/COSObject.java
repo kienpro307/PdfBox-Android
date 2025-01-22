@@ -63,6 +63,16 @@ public class COSObject extends COSBase implements COSUpdateInfo
     }
 
     /**
+     * Indicates if the referenced object is present or not.
+     *
+     * @return true if the indirect object is dereferenced
+     */
+    public boolean isObjectNull()
+    {
+        return baseObject == null;
+    }
+
+    /**
      * This will get the dictionary object in this object that has the name key.
      *
      * @param key The key to the value that we are searching for.

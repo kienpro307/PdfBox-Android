@@ -470,10 +470,14 @@ public class COSDocument extends COSBase implements Closeable
         // close all open I/O streams
         for (COSObject object : getObjects())
         {
-            COSBase cosObject = object.getObject();
-            if (cosObject instanceof COSStream)
+            if (!object.isObjectNull())
             {
-                firstException = IOUtils.closeAndLogException((COSStream) cosObject, "COSStream", firstException);
+                COSBase cosObject = object.getObject();
+                if (cosObject instanceof COSStream)
+                {
+                    firstException = IOUtils.closeAndLogException((COSStream) cosObject,
+                            "COSStream", firstException);
+                }
             }
         }
         for (COSStream stream : streams)

@@ -64,6 +64,10 @@ public class PDCIDFontType2 extends PDCIDFont
         this(fontDictionary, parent, null);
     }
 
+    public byte[] encodeGlyphId(int glyphId) {
+        return new byte[]{(byte)(glyphId >> 8 & 255), (byte)(glyphId & 255)};
+    }
+
     /**
      * Constructor.
      *

@@ -61,18 +61,10 @@ abstract class TrueTypeEmbedder implements Subsetter
     private final PDDocument document;
     protected TrueTypeFont ttf;
     protected PDFontDescriptor fontDescriptor;
-
-    /**
-     * For API backwards compatibility.
-     *
-     * @deprecated
-     */
-    @Deprecated
-    protected final CmapSubtable cmap;
-
     protected final CmapLookup cmapLookup;
     private final Set<Integer> subsetCodePoints = new HashSet<Integer>();
     private final boolean embedSubset;
+    private final Set<Integer> allGlyphIds = new HashSet<Integer>();
 
     /**
      * Creates a new TrueType font for embedding.
@@ -120,7 +112,6 @@ abstract class TrueTypeEmbedder implements Subsetter
         dict.setName(COSName.BASE_FONT, ttf.getName());
 
         // choose a Unicode "cmap"
-        cmap = ttf.getUnicodeCmap();
         cmapLookup = ttf.getUnicodeCmapLookup();
     }
 
@@ -324,6 +315,10 @@ abstract class TrueTypeEmbedder implements Subsetter
         subsetCodePoints.add(codePoint);
     }
 
+    public void addGlyphIds(Set<Integer> glyphIds) {
+        this.allGlyphIds.addAll(glyphIds);
+    }
+
     @Override
     public void subset() throws IOException
     {
@@ -354,6 +349,9 @@ abstract class TrueTypeEmbedder implements Subsetter
         // set the GIDs to subset
         TTFSubsetter subsetter = new TTFSubsetter(ttf, tables);
         subsetter.addAll(subsetCodePoints);
+        if (!this.allGlyphIds.isEmpty()) {
+            subsetter.addGlyphIds(this.allGlyphIds);
+        }
 
         // calculate deterministic tag based on the chosen subset
         Map<Integer, Integer> gidToCid = subsetter.getGIDMap();

@@ -18,6 +18,8 @@ package com.tom_roush.fontbox.cff;
 
 import android.util.Log;
 
+import com.tom_roush.fontbox.util.Charsets;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,8 +28,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import com.tom_roush.fontbox.util.Charsets;
 
 /**
  * This class represents a parser for a CFF font. 
@@ -108,6 +108,11 @@ public class CFFParser
             throw new IOException("Name index missing in CFF font");
         }
         byte[][] topDictIndex = readIndexData(input);
+        if (topDictIndex == null)
+        {
+            throw new IOException("Top DICT INDEX missing in CFF font");
+        }
+
         stringIndex = readStringIndexData(input);
         byte[][] globalSubrIndex = readIndexData(input);
 

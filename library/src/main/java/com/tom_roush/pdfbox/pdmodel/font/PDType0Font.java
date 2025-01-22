@@ -30,6 +30,7 @@ import com.tom_roush.fontbox.cmap.CMap;
 import com.tom_roush.fontbox.ttf.CmapLookup;
 import com.tom_roush.fontbox.ttf.TTFParser;
 import com.tom_roush.fontbox.ttf.TrueTypeFont;
+import com.tom_roush.fontbox.ttf.model.GsubData;
 import com.tom_roush.fontbox.util.BoundingBox;
 import com.tom_roush.pdfbox.cos.COSArray;
 import com.tom_roush.pdfbox.cos.COSBase;
@@ -53,6 +54,8 @@ public class PDType0Font extends PDFont implements PDVectorFont
     private PDCIDFontType2Embedder embedder;
     private final Set<Integer> noUnicode = new HashSet<Integer>();
     private TrueTypeFont ttf;
+    private final GsubData gsubData;
+    private final CmapLookup cmapLookup;
 
     /**
      * Loads a TTF to be embedded and subset into a document as a Type 0 font. If you are loading a
@@ -179,12 +182,14 @@ public class PDType0Font extends PDFont implements PDVectorFont
     public PDType0Font(COSDictionary fontDictionary) throws IOException
     {
         super(fontDictionary);
-        COSBase base = dict.getDictionaryObject(COSName.DESCENDANT_FONTS);
-        if (!(base instanceof COSArray))
+
+        gsubData = GsubData.NO_DATA_FOUND;
+        cmapLookup = null;
+        COSArray descendantFonts = dict.getCOSArray(COSName.DESCENDANT_FONTS);
+        if (descendantFonts == null)
         {
             throw new IOException("Missing descendant font array");
         }
-        COSArray descendantFonts = (COSArray) base;
         if (descendantFonts.size() == 0)
         {
             throw new IOException("Descendant font array is empty");
@@ -223,6 +228,8 @@ public class PDType0Font extends PDFont implements PDVectorFont
         {
             ttf.enableVerticalSubstitutions();
         }
+        this.gsubData = ttf.getGsubData();
+        this.cmapLookup = ttf.getUnicodeCmapLookup();
         embedder = new PDCIDFontType2Embedder(document, dict, ttf, embedSubset, this, vertical);
         descendantFont = embedder.getCIDFont();
         readEncoding();
@@ -250,6 +257,13 @@ public class PDType0Font extends PDFont implements PDVectorFont
             throw new IllegalStateException("This font was created with subsetting disabled");
         }
         embedder.addToSubset(codePoint);
+    }
+    public void addGlyphsToSubset(Set<Integer> glyphIds) {
+        if (!this.willBeSubset()) {
+            throw new IllegalStateException("This font was created with subsetting disabled");
+        } else {
+            this.embedder.addGlyphIds(glyphIds);
+        }
     }
 
     @Override
@@ -630,5 +644,16 @@ public class PDType0Font extends PDFont implements PDVectorFont
     public boolean hasGlyph(int code) throws IOException
     {
         return descendantFont.hasGlyph(code);
+    }
+
+    public GsubData getGsubData() {
+        return this.gsubData;
+    }
+
+    public byte[] encodeGlyphId(int glyphId) {
+        return this.descendantFont.encodeGlyphId(glyphId);
+    }
+    public CmapLookup getCmapLookup() {
+        return this.cmapLookup;
     }
 }

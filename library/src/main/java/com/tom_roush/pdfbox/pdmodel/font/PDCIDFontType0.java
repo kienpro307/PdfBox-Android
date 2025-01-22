@@ -165,6 +165,10 @@ public class PDCIDFontType0 extends PDCIDFont
         fontMatrixTransform.scale(1000, 1000);
     }
 
+    public byte[] encodeGlyphId(int glyphId) {
+        throw new UnsupportedOperationException();
+    }
+
     @Override
     public final Matrix getFontMatrix()
     {
